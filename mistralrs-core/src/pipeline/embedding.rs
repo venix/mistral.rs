@@ -67,6 +67,7 @@ pub struct EmbeddingPipeline {
     mapper: Box<dyn DeviceMapper + Send + Sync>,
     modules: Vec<Box<dyn Module + Send + Sync>>,
     processor: Arc<dyn Processor + Send + Sync>,
+    cache: EitherCache,
 }
 
 /// A loader for an embedding (non-quantized) model.
@@ -709,6 +710,7 @@ impl Loader for EmbeddingLoader {
             processor: Arc::new(EmbeddingProcessor {
                 has_causal_attention,
             }),
+            cache: EitherCache::Normal(super::NormalCache::new(0, max_seq_len)),
         })))
     }
 
@@ -786,7 +788,7 @@ impl CacheManagerMixin for EmbeddingPipeline {
         Ok(())
     }
     fn cache(&self) -> &EitherCache {
-        unreachable!()
+        &self.cache
     }
 }
 
