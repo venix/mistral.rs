@@ -1,0 +1,47 @@
+[workspace]
+resolver = "2"
+members = ["crates/embeddinggemma_core", "crates/embeddinggemma_api"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+repository = "https://github.com/ikcore/ai-embeddinggemma-2"
+keywords = ["embeddings", "embeddinggemma", "multimodal", "candle", "mlx"]
+categories = ["science", "web-programming"]
+
+[workspace.dependencies]
+embeddinggemma_core = { path = "crates/embeddinggemma_core", version = "0.1.0" }
+
+# Inference (CPU / CUDA / Metal)
+candle-core = "0.11"
+candle-nn = "0.11"
+tokenizers = { version = "0.23", default-features = false, features = ["onig"] }
+hf-hub = { version = "0.4", default-features = false, features = ["ureq"] }
+
+# Inference (Apple MLX, macOS only — see crates/embeddinggemma_core/Cargo.toml)
+mlx-rs = { version = "=0.32.0", default-features = false }
+
+# Media
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif", "bmp"] }
+symphonia = { version = "0.5", default-features = false, features = ["wav", "pcm", "mp3", "flac", "ogg", "vorbis", "isomp4", "aac"] }
+rustfft = "6"
+base64 = "0.22"
+
+# Serving
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "query", "tokio"] }
+tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "macros", "net", "signal"] }
+
+# Shared
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+# Image decoding / resizing and the FFT are hot even in dev builds.
+[profile.dev.package."*"]
+opt-level = 2

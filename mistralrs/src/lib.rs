@@ -366,3 +366,11 @@ pub use mistralrs_macros::tool;
 
 // Re-export schemars for use in tool definitions
 pub use schemars;
+
+#[cfg(feature = "multimodal-embeddings")]
+mod multimodal_embedding;
+#[cfg(feature = "multimodal-embeddings")]
+pub use multimodal_embedding::{
+    MultimodalEmbeddingInput, MultimodalEmbeddingInputError, MultimodalEmbeddingModel,
+    MultimodalEmbeddingModelBuilder, MultimodalEmbeddingOutput,
+};

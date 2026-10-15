@@ -17,6 +17,7 @@ members = [
     "mistralrs-code-exec",
     "mistralrs-sandbox",
 ]
+exclude = ["vendor/embeddinggemma_core"]
 resolver = "2"
 
 [workspace.package]
